@@ -7,6 +7,8 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
+var ListMap = map[string](string){}
+
 func main() {
 
 	e := echo.New()
@@ -21,7 +23,13 @@ func main() {
 	}))
 	// Root route => handler
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Yes! I am alive!\n")
+		var response string
+
+		ListMap["kitarp"] = "www.twitter.com/kitarp"
+		for key, value := range ListMap {
+			response = response + key + " : " + value
+		}
+		return c.String(http.StatusOK, response)
 	})
 
 	// Run Server
