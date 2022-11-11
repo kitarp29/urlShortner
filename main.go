@@ -25,11 +25,13 @@ func main() {
 	// Root route => handler
 	e.GET("/", func(c echo.Context) error {
 		var response string
-
-		ListMap["kitarp"] = "www.twitter.com/kitarp"
+		uuid := c.QueryParam("u")
 		for key, value := range ListMap {
-			response = response + key + " : " + value
+			if key == uuid {
+				return c.Redirect(http.StatusMovedPermanently, value)
+			} //response = response + key + " : " + value
 		}
+		response = "No URL found"
 		return c.String(http.StatusOK, response)
 	})
 
@@ -38,7 +40,15 @@ func main() {
 		link := c.QueryParam("link")
 		newkey := shortuuid.New()
 		ListMap[newkey] = link
-		response += "https://localhost:8000/" + newkey
+		response += "http://localhost:8000/?u=" + newkey
+		return c.String(http.StatusOK, response)
+	})
+
+	e.GET("list", func(c echo.Context) error {
+		var response string
+		for key, value := range ListMap {
+			response = response + key + " : " + value
+		}
 		return c.String(http.StatusOK, response)
 	})
 
