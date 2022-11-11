@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo"
 )
 
+// Test function for Redirect function
 func TestRedirect(t *testing.T) {
 	// Setup
 	for key, value := range ListMap {
@@ -26,6 +27,7 @@ func TestRedirect(t *testing.T) {
 	}
 }
 
+// Test function for AddLink function
 func TestAddLink(t *testing.T) {
 	// Setup
 
