@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/lithammer/shortuuid/v3"
 )
 
 var ListMap = map[string](string){}
@@ -29,6 +30,15 @@ func main() {
 		for key, value := range ListMap {
 			response = response + key + " : " + value
 		}
+		return c.String(http.StatusOK, response)
+	})
+
+	e.POST("addlink", func(c echo.Context) error {
+		var response string
+		link := c.QueryParam("link")
+		newkey := shortuuid.New()
+		ListMap[newkey] = link
+		response += "https://localhost:8000/" + newkey
 		return c.String(http.StatusOK, response)
 	})
 
