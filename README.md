@@ -56,6 +56,6 @@ docker run -p 8000:8000 urlshort:latest
   ## **The project is up and running🔥!**
  
 
-
+Refer PostMan Collection: [Here](https://www.getpostman.com/collections/a1f2466abe2ea9c6a977)
 ### Thanks for the interest in my API :)
 <hr>
