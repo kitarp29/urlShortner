@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -8,7 +9,7 @@ import (
 	"github.com/lithammer/shortuuid/v3"
 )
 
-var ListMap = map[string](string){}
+var ListMap = map[string](string){"kitarp29": "https://twitter.com/kitarp29"}
 
 func main() {
 
@@ -24,46 +25,47 @@ func main() {
 	}))
 	// Root route => handler
 	e.GET("/", func(c echo.Context) error {
-		return Redirect(c)
+		return c.Redirect(http.StatusMovedPermanently, Redirect(c))
 	})
 
 	e.POST("addlink", func(c echo.Context) error {
-		return AddLink(c)
+		return c.String(http.StatusOK, AddLink(c))
 	})
 
 	e.GET("list", func(c echo.Context) error {
-		return List(c)
+		return c.String(http.StatusOK, List(c))
 	})
 
 	// Run Server
 	e.Logger.Fatal(e.Start(":8000"))
 }
 
-func Redirect(c echo.Context) error {
+func Redirect(c echo.Context) string {
 	var response string
+	log.Println(c.QueryParam("u"))
 	uuid := c.QueryParam("u")
 	for key, value := range ListMap {
 		if key == uuid {
-			return c.Redirect(http.StatusMovedPermanently, value)
-		} //response = response + key + " : " + value
+			return value
+		}
 	}
 	response = "No URL found"
-	return c.String(http.StatusOK, response)
+	return response
 }
 
-func AddLink(c echo.Context) error {
+func AddLink(c echo.Context) string {
 	var response string
 	link := c.QueryParam("link")
 	newkey := shortuuid.New()
 	ListMap[newkey] = link
 	response += "http://localhost:8000/?u=" + newkey
-	return c.String(http.StatusOK, response)
+	return response
 }
 
-func List(c echo.Context) error {
+func List(c echo.Context) string {
 	var response string
 	for key, value := range ListMap {
 		response = response + key + " : " + value
 	}
-	return c.String(http.StatusOK, response)
+	return response
 }
