@@ -1,4 +1,4 @@
-module main
+module urlShort
 
 go 1.19
 
